@@ -1,48 +1,56 @@
-/* script.js — All the JavaScript for Aditya's portfolio */
+document.addEventListener("DOMContentLoaded", function() {
 
+  /* 1. HAMBURGER MENU */
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.querySelector('.nav-links');
 
-/* 1. HAMBURGER MENU (mobile only)
-   Clicking the hamburger icon shows/hides the nav links */
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', function () {
+      navLinks.classList.toggle('open');
+    });
 
-const hamburger = document.getElementById('hamburger');
-const navLinks  = document.getElementById('navLinks');
+    navLinks.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        navLinks.classList.remove('open');
+      });
+    });
+  }
 
-// Toggle "open" class when hamburger is clicked
-hamburger.addEventListener('click', function () {
-  navLinks.classList.toggle('open'); // adds class if missing, removes if present
-});
+  /* 2. ACTIVE NAV HIGHLIGHT ON SCROLL */
+  const sections   = document.querySelectorAll('section');
+  const navAnchors = document.querySelectorAll('.nav-links a');
 
-// Close the menu when any nav link is clicked
-navLinks.querySelectorAll('a').forEach(function (link) {
-  link.addEventListener('click', function () {
-    navLinks.classList.remove('open');
+  window.addEventListener('scroll', function () {
+    let current = '';
+    sections.forEach(function (section) {
+      if (window.scrollY >= section.offsetTop - 80) {
+        current = section.getAttribute('id');
+      }
+    });
+
+    navAnchors.forEach(function (anchor) {
+      anchor.style.color = '';
+      if (anchor.getAttribute('href') === '#' + current) {
+        anchor.style.color = '#2c5f8a';
+      }
+    });
   });
-});
 
+  /* 3. SCROLL TO TOP BUTTON SCRIPT */
+  const scrollBtn = document.getElementById("scrollToTopBtn");
 
-/* 2. ACTIVE NAV HIGHLIGHT ON SCROLL
-   Colors the nav link that matches the current section */
+  if (scrollBtn) {
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) { 
+        scrollBtn.classList.add("show"); 
+      } else { 
+        scrollBtn.classList.remove("show"); 
+      }
+    });
 
-const sections   = document.querySelectorAll('section');
-const navAnchors = document.querySelectorAll('.nav-links a');
-
-window.addEventListener('scroll', function () {
-
-  let current = ''; // stores which section is on screen
-
-  // Find which section the user has scrolled to
-  sections.forEach(function (section) {
-    if (window.scrollY >= section.offsetTop - 80) {
-      current = section.getAttribute('id'); // e.g. "about", "skills"
-    }
-  });
-
-  // Highlight the matching nav link, reset the rest
-  navAnchors.forEach(function (anchor) {
-    anchor.style.color = ''; // reset color
-    if (anchor.getAttribute('href') === '#' + current) {
-      anchor.style.color = '#2c5f8a'; // blue highlight
-    }
-  });
+    scrollBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
 
 });
